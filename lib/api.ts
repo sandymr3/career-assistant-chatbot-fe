@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://career-assistant-chatbot-fe.vercel.app"
 
 export interface Profile {
   tech_stack: string[]
@@ -19,11 +19,9 @@ export async function checkProfile(email: string): Promise<{ exists: boolean; pr
     },
     body: JSON.stringify({ email }),
   })
-
   if (!response.ok) {
     throw new Error("Failed to check profile")
   }
-
   return response.json()
 }
 
@@ -64,8 +62,8 @@ export async function sendChatMessage(email: string, message: string): Promise<{
 }
 
 export async function getChatHistory(email: string): Promise<ChatMessage[]> {
-  const response = await fetch(`${API_URL}/chats/${email}`)
 
+  const response = await fetch(`${API_URL}/chats/${email}`)
   if (!response.ok) {
     throw new Error("Failed to get chat history")
   }
@@ -74,9 +72,7 @@ export async function getChatHistory(email: string): Promise<ChatMessage[]> {
 }
 
 export async function deleteChatHistory(email: string): Promise<{ success: boolean }> {
-  const response = await fetch(`${API_URL}/chats/${email}`, {
-    method: "DELETE",
-  })
+  const response = await fetch(`${API_URL}/chats/${email}`, {method: "DELETE",})
 
   if (!response.ok) {
     throw new Error("Failed to delete chat history")
