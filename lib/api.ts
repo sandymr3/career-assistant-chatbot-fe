@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://carrer-transision-chatbot.onrender.com"
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"
 
 export interface Profile {
   tech_stack: string[]
@@ -25,11 +25,7 @@ export async function checkProfile(email: string): Promise<{ exists: boolean; pr
   return response.json()
 }
 
-export async function initializeProfile(
-  email: string,
-  domain: string,
-  tech_stack: string,
-): Promise<{ profile: Profile }> {
+export async function initializeProfile(email: string,domain: string,tech_stack: string,): Promise<{ profile: Profile }> {
   const response = await fetch(`${API_URL}/initialize-profile`, {
     method: "POST",
     headers: {
@@ -61,18 +57,23 @@ export async function sendChatMessage(email: string, message: string): Promise<{
   return response.json()
 }
 
-export async function getChatHistory(email: string): Promise<ChatMessage[]> {
 
-  const response = await fetch(`${API_URL}/chats/${email}`)
-  if (!response.ok) {
-    throw new Error("Failed to get chat history")
+
+export async function getChatHistory(email: string) {
+  const url = `${API_URL}/chat-history?email=${encodeURIComponent(email)}`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.error("Chat history fetch failed:", res.status, errorText);
+    throw new Error("Failed to load chat");
   }
-
-  return response.json()
+  return await res.json();
 }
 
+
+
 export async function deleteChatHistory(email: string): Promise<{ success: boolean }> {
-  const response = await fetch(`${API_URL}/chats/${email}`, {method: "DELETE",})
+  const response = await fetch(`${API_URL}/chat/${email}`, {method: "DELETE",})
 
   if (!response.ok) {
     throw new Error("Failed to delete chat history")
