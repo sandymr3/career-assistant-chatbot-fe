@@ -31,7 +31,7 @@ export async function initializeProfile(email: string,domain: string,tech_stack:
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ email, domain, tech_stack }),
+    body: JSON.stringify({email , domain , tech_stack }),
   })
 
   if (!response.ok) {
